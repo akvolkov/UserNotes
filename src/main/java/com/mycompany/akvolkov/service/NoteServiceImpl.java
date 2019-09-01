@@ -40,4 +40,11 @@ public class NoteServiceImpl implements NoteService {
     public Note getById(int id) {
         return noteDao.getById(id);
     }
+
+    @Override
+    public Note getByTitle(String title) {
+        Note byTitle = noteDao.getByTitle(title);
+        System.out.println("byTitle = " + byTitle);
+        return byTitle;
+    }
 }

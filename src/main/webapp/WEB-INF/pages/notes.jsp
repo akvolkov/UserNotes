@@ -5,6 +5,9 @@
     <title>Notes</title>
 </head>
 <body>
+    <form action="/logout" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
     <h2>Notes</h2>
     <table border="1">
         <tr>
@@ -29,5 +32,10 @@
     </table>
     <c:url value="/add" var="add"/>
     <a href="${add}">Add new note</a>
+    <form action="/findByTitle" method="post">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title">
+        <input type="submit" value="Find"/>
+    </form>
 </body>
 </html>

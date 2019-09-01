@@ -46,4 +46,10 @@ public class NoteDaoImpl implements NoteDao {
         String sql = "SELECT * FROM notes where ID = ?";
         return jdbcTemplate.queryForObject(sql, new NoteMapper(), id);
     }
+
+    @Override
+    public Note getByTitle(String title) {
+        String sql = "SELECT * FROM notes where TITLE = ?";
+        return jdbcTemplate.queryForObject(sql, new NoteMapper(), title);
+    }
 }

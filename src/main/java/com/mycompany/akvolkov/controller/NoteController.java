@@ -19,6 +19,22 @@ public class NoteController {
     }
 
     @GetMapping(value = "/")
+    public ModelAndView greeting() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("greeting");
+        return modelAndView;
+    }
+
+    @PostMapping(value = "/findByTitle")
+    public ModelAndView findByTitle(@ModelAttribute("title")  String title) {
+        ModelAndView modelAndView = new ModelAndView();
+        Note note = noteService.getByTitle(title);
+        modelAndView.addObject("note", note);
+        modelAndView.setViewName("description");
+        return modelAndView;
+    }
+
+    @GetMapping(value = "/notes")
     public ModelAndView allNotes() {
         List<Note> notesList = noteService.allNotes();
         ModelAndView modelAndView = new ModelAndView();
@@ -39,7 +55,7 @@ public class NoteController {
     @PostMapping(value = "/edit")
     public ModelAndView editNote(@ModelAttribute("note") Note note) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/");
+        modelAndView.setViewName("redirect:/notes");
         noteService.edit(note);
         return modelAndView;
     }
@@ -54,7 +70,7 @@ public class NoteController {
     @PostMapping(value = "/add")
     public ModelAndView addNote(@ModelAttribute("note") Note note) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/");
+        modelAndView.setViewName("redirect:/notes");
         noteService.add(note);
         return modelAndView;
     }
@@ -62,7 +78,7 @@ public class NoteController {
     @GetMapping(value = "/delete/{id}")
     public ModelAndView deleteNote(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/");
+        modelAndView.setViewName("redirect:/notes");
         Note note = noteService.getById(id);
         noteService.delete(note);
         return modelAndView;
