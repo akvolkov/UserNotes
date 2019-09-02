@@ -17,16 +17,17 @@
         <c:url value="/edit" var="var"/>
     </c:if>
     <form action="${var}" method="POST">
+        <input type="hidden" name="${_csrf.parameterName}"
+               value="${_csrf.token}" />
         <c:if test="${!empty note.title}">
             <input type="hidden" name="id" value="${note.id}">
         </c:if>
         <label for="title">Title</label>
-        <input type="text" name="title" id="title">
+        <input type="text" name="title" id="title" value="${note.title}">
         <label for="description">Description</label>
-        <input type="text" name="description" id="description">
+        <input type="text" name="description" id="description" value="${note.description}">
         <label for="author">Author</label>
-        <input type="text" name="author" id="author">
-<%--        <input type="submit" value="Edit note">--%>
+        <input type="text" name="author" id="author" value="${note.author}">
         <c:if test="${empty note.title}">
             <input type="submit" value="Add new note">
         </c:if>

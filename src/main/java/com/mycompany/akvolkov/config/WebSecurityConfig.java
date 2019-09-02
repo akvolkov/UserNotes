@@ -1,5 +1,7 @@
 package com.mycompany.akvolkov.config;
 
+import com.mycompany.akvolkov.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,24 +12,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-//    @Autowired
-//    public void registerGlobalAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .userDetailsService(userDetailsService());
-////                .passwordEncoder(getShaPasswordEncoder());
-//    }
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    DataSource dataSource;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/").permitAll()
+                    .antMatchers("/", "/registration").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/login")
+                    .failureUrl("/login?error")
                     .permitAll()
                 .and()
                     .logout()
@@ -37,12 +44,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("password")
-                        .roles("USER")
-                        .build();
-        return new InMemoryUserDetailsManager(user);
+        List<com.mycompany.akvolkov.entity.User> users = userService.getAllUsers();
+        ArrayList<UserDetails> details = new ArrayList<>();
+        for (com.mycompany.akvolkov.entity.User user: users
+             ) {
+            UserDetails userDetails =
+                    User.withDefaultPasswordEncoder()
+                            .username(user.getLogin())
+                            .password(user.getPassword())
+                            .roles("USER")
+                            .build();
+            details.add(userDetails);
+        }
+        return new InMemoryUserDetailsManager(details.toArray(new UserDetails[0]));
     }
+
 }

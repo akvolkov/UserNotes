@@ -43,8 +43,6 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Note getByTitle(String title) {
-        Note byTitle = noteDao.getByTitle(title);
-        System.out.println("byTitle = " + byTitle);
-        return byTitle;
+        return noteDao.getByTitle(title);
     }
 }

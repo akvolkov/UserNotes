@@ -27,7 +27,7 @@ public class NoteDaoImpl implements NoteDao {
     public void add(Note note) {
         String sql = "INSERT INTO notes (title, description, AUTHOR) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, note.getTitle(), note.getDescription(), note.getAuthor());
-    }
+}
 
     @Override
     public void delete(Note note) {
